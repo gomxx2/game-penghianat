@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .soldier-container {
+            margin-bottom: 0.0000002cm; /* Adjust the margin as needed */
+        }
+		.background-text {
+            background-color: #333; /* Warna latar belakang */
+            color: white; /* Warna teks */
+            font-size: 18px; /* Ukuran teks */
+            font-family: Arial, sans-serif; /* Jenis font teks */
+            padding: 10px; /* Ruang padding di sekitar teks */
+            border-radius: 5px; /* Mengatur sudut border untuk elemen */
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 2px solid black;
+        }
+    </style>
+    <script type="text/javascript">
+        var startTime;
+
+        function shuffleSoldierPositions() {
+            var soldierContainers = document.querySelectorAll('.soldier-container');
+            soldierContainers.forEach(function(container) {
+                var soldier = container.querySelector('img');
+                var newLeft = Math.floor(Math.random() * (window.innerWidth - soldier.width));
+                var newTop = Math.floor(Math.random() * (window.innerHeight - soldier.height));
+                container.style.left = newLeft + 'px';
+                container.style.top = newTop + 'px';
+            });
+        }
+
+        function createSoldierContainer(scrollDelay, imageSrc) {
+            var soldierContainer = document.createElement('div');
+            soldierContainer.className = 'soldier-container';
+
+            var marquee = document.createElement('marquee');
+            marquee.direction = 'right';
+            marquee.setAttribute('scrollamount', scrollDelay); // Set the scroll delay
+
+            var link = document.createElement('a');
+            link.href = '#';
+            link.target = '_top';
+
+            var img = document.createElement('img');
+            img.src = imageSrc;
+            img.alt = 'Nave';
+            img.width = 100;
+
+            link.appendChild(img);
+            marquee.appendChild(link);
+            soldierContainer.appendChild(marquee);
+
+            if (imageSrc === 'solder-msg.png') {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
+                    alert('tidak jadi cari penghianat, carilah pembawa bendera, soalnya bendera mau dipinjam untuk 17 Agustusan hehe');
+                });
+            } else if (imageSrc === 'solder-indo.png') {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
+                    var endTime = new Date().getTime();
+                    var elapsedTime = (endTime - startTime) / 1000;
+                    document.getElementById('time').textContent = elapsedTime.toFixed(2);
+                    document.getElementById('modal').style.display = 'block';
+                });
+            }
+
+            document.body.appendChild(soldierContainer);
+            shuffleSoldierPositions();
+        }
+
+		window.onload = function() {
+			startTime = new Date().getTime();
+			var numSoldiers = Math.floor(Math.random() * 9) + 5; // Generate a random number of soldiers between 2 and 10
+			var imageSrcArray = ['solder.png', 'solder-indo.png', 'solder-msg.png'];
+
+			for (var i = 0; i < numSoldiers; i++) {
+				var imageSrc = imageSrcArray[Math.floor(Math.random() * imageSrcArray.length)];
+				var scrollDelay = Math.floor(Math.random() * 40) + 10; // Generate a random scroll delay between 10 and 20
+				createSoldierContainer(scrollDelay, imageSrc);
+			}
+		};
+    </script>
+</head>
+<body bgcolor="#000" background="2Ct5.gif">
+    <center>
+        <h1>
+            <font face="Impact" color="white" size="8">
+                temukan lah penghianat di tentara kita
+            </font>
+            <!-- <font face="Impact" color="red" size="8">
+                INDONESIA
+            </font> -->
+        </h1>
+        <p>
+            <font class="background-text">
+                carilah dan 'click' pembawa pesan  <img src="solder-msg.png" alt="Nave" width="120"> untuk menemukan tipikalnya 
+            </font>
+        </p>
+        <h2>
+            <font face="Impact" color="orange" size="5" class="background-text">
+                silahkan refresh bila tidak ada pembawa pesan!!
+            </font>
+        </h2>
+    </center>
+    <div id="modal">
+        <p>Congrats, Anda berhasil menemukan pembawa bendera</p>
+        <p>Rekor Anda: <span id="time">0.00</span> detik</p>
+    </div>
+</body>
+</html>
